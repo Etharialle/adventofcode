@@ -12,10 +12,10 @@ for x in range(len(df)):
         
     if len(df.iloc[x]) == 1:
         value = int(df.iloc[x][0])
-        df2.loc[len(df2.index)] = value
+        df2.loc[len(df2.index)] = value + (value * 10)
     else:
         value = int(df.iloc[x][0] + df.iloc[x][-1])
         df2.loc[len(df2.index)] = value
 
 print(df2['cal_values'].sum())
-
+print(df2.tail)
