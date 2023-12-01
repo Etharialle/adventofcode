@@ -1,0 +1,21 @@
+import pandas as pd
+
+df = pd.read_csv('calibration.txt', header=None)
+df2 = pd.DataFrame(data={'cal_values': [0]})
+#regex to find just digits
+df = df[0].str.findall(r'[0-9]')
+
+for x in range(len(df)):
+    if len(df.iloc[x]) == 0:
+        value = 0
+        df2.loc[len(df2.index)] = value
+        
+    if len(df.iloc[x]) == 1:
+        value = int(df.iloc[x][0])
+        df2.loc[len(df2.index)] = value
+    else:
+        value = int(df.iloc[x][0] + df.iloc[x][-1])
+        df2.loc[len(df2.index)] = value
+
+print(df2['cal_values'].sum())
+
