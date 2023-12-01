@@ -1,0 +1,47 @@
+import pandas as pd
+
+df = pd.read_csv('calibration.txt', header=None)
+df2 = pd.DataFrame(data={'cal_values': [0]})
+
+
+#convert spelled out numbers to digits
+#list of spelled out digits
+"""
+#Also deal with combined words:
+    e.g. eighttwo, twone, oneight, eightwone, sevenine, etc.
+"""
+digits = {#'zero': '0',
+          'eightwo': '82',
+          'twone': '21',
+          'oneight': '18',
+          'nine': '9',
+          'eight': '8',
+          'seven': '7',
+          'six': '6',
+          'five': '5',
+          'four': '4',
+          'three': '3',
+          'two': '2',
+          'one': '1'
+          }
+
+for k,v in digits.items():
+    df[0] = [x.replace(k,v) for x in df[0]]
+
+#regex to find just digits
+df = df[0].str.findall(r'[0-9]')
+#print(df.head())
+#Create list of 2 digit numbers
+for x in range(len(df)):
+    if len(df.iloc[x]) == 0:
+        value = 0
+        df2.loc[len(df2.index)] = value
+        
+    if len(df.iloc[x]) == 1:
+        value = int(df.iloc[x][0])
+        df2.loc[len(df2.index)] = value + (value * 10)
+    else:
+        value = int(df.iloc[x][0] + df.iloc[x][-1])
+        df2.loc[len(df2.index)] = value
+#print(df.head(n=115))
+print(df2['cal_values'].sum())
